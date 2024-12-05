@@ -8,6 +8,6 @@ __pycache__/
 *.log
 *.sqlite3
 db.sqlite3
-/media
-/staticfiles
+media
+staticfiles
 .env
