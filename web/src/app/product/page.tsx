@@ -5,6 +5,7 @@ export default async function Product() {
 
   return (
     <div className="p-4">
+      <h1 className="text-lg font-medium">Hello World!</h1>
       <ProductList products={products} />
     </div>
   );
