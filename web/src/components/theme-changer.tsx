@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { Computer, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ export function ThemeChanger() {
         <Button variant="ghost" className="w-8 h-8 rounded-full">
           <Sun className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Computer className="absolute rotate-90 scale-0 transition-all dark:rotate-90 dark:scale-0 system:rotate-0 system:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
