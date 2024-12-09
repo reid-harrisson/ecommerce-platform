@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'product',
     'user',
-    'cart'
+    'cart',
+    'order',
 ]
 
 # Add REST framework settings
