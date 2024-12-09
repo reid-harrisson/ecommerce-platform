@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'product',
-    'user'
+    'user',
+    'cart'
 ]
 
 # Add REST framework settings
