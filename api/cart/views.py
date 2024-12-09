@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Cart
+from product.models import Product
 from .serializers import CartSerializer
 from django.db.models import Q
 
@@ -15,9 +16,9 @@ class CartView(APIView):
   def get(self, request, id=None):
     if id:
       try:
-        result = Cart.objects.get(id=id)
-        serializer = CartSerializer(result)
-        return Response({'status': 'success', 'cart': serializer.data}, status=status.HTTP_200_OK)
+        cart = Cart.objects.get(id=id)
+        cart_serializer = CartSerializer(cart)
+        return Response({'status': 'success', 'cart': cart_serializer.data}, status=status.HTTP_200_OK)
       except Cart.DoesNotExist:
         return Response({'status': 'error', 'message': 'Cart not found'}, status=status.HTTP_404_NOT_FOUND)
     
@@ -25,38 +26,42 @@ class CartView(APIView):
 
     if username:
       try:
-        result = Cart.objects.filter(username=username).values()
-        serializer = CartSerializer(result, many=True)
-        return Response({'status': 'success', 'carts': serializer.data}, status=status.HTTP_200_OK)
+        cart = Cart.objects.filter(username=username).values()
+        cart_serializer = CartSerializer(cart, many=True)
+        total_price = 0.0
+        for cart in cart_serializer.data:
+          product = Product.objects.get(id=cart['product_id'])
+          total_price += product.price * cart['count']
+        return Response({'status': 'success', 'carts': cart_serializer.data, 'total_price': total_price}, status=status.HTTP_200_OK)
       except Cart.DoesNotExist:
         return Response({'status': 'error', 'message': 'Cart not found for this user'}, status=status.HTTP_404_NOT_FOUND)
     
     results = Cart.objects.all()
-    serializer = CartSerializer(results, many=True)
-    return Response({'status': 'success', 'carts': serializer.data}, status=status.HTTP_200_OK)
+    cart_serializer = CartSerializer(results, many=True)
+    return Response({'status': 'success', 'carts': cart_serializer.data}, status=status.HTTP_200_OK)
   
   def post(self, request):
-    serializer = CartSerializer(data = request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response({"status": "success", "data": serializer.data}, status = status.HTTP_201_CREATED)  
+    cart_serializer = CartSerializer(data = request.data)
+    if cart_serializer.is_valid():
+      cart_serializer.save()
+      return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_201_CREATED)  
     else:
-      return Response({"status": "error", "data": serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
 
   def put(self, request, id):
-    result = Cart.objects.get(id = id)
-    serializer = CartSerializer(result, data = request.data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response({"status": "success", "data": serializer.data}, status = status.HTTP_200_OK)
+    cart = Cart.objects.get(id = id)
+    cart_serializer = CartSerializer(cart, data = request.data)
+    if cart_serializer.is_valid():
+      cart_serializer.save()
+      return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_200_OK)
     else:
-      return Response({"status": "error", "data": serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
 
   def patch(self, request, id):
-    result = Cart.objects.get(id = id)
-    serializer = CartSerializer(result, data = request.data, partial = True)
-    if serializer.is_valid():
-      serializer.save()
-      return Response({"status": "success", "data": serializer.data}, status = status.HTTP_200_OK)
+    cart = Cart.objects.get(id = id)
+    cart_serializer = CartSerializer(cart, data = request.data, partial = True)
+    if cart_serializer.is_valid():
+      cart_serializer.save()
+      return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_200_OK)
     else:
-      return Response({"status": "error", "data": serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
