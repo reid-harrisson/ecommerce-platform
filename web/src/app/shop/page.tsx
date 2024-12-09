@@ -1,13 +1,13 @@
-import Product from "./product";
 import { Layout } from "@/components/layout";
+import Shop from "./shop";
 
-export default async function ProductPage() {
+export default async function ShopPage() {
   return (
     <Layout>
       <h2 className="font-medium text-lg text-secondary-foreground">
-        Product Management
+        Products
       </h2>
-      <Product />
+      <Shop />
     </Layout>
   );
 }
