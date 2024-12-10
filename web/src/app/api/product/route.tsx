@@ -1,21 +1,23 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function GET() {
   try {
-    // Fetch from external API here, server-side
-    const response = await fetch("http://localhost:8000/product", {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access");
+    console.log(`Bearer ${accessToken?.value}`);
+    const response = await fetch(`${process.env.BACKEND_API_URL}/product/`, {
       headers: {
         "Content-Type": "application/json",
-        // Add any required API keys or auth headers
+        Authorization: `Bearer ${accessToken?.value}`,
       },
     });
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    console.error("API error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch products" },
+      { error: "failed to get products" },
       { status: 500 }
     );
   }
