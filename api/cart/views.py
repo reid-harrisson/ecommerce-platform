@@ -29,10 +29,18 @@ class CartView(APIView):
         cart = Cart.objects.filter(username=username).values()
         cart_serializer = CartSerializer(cart, many=True)
         total_price = 0.0
+        carts = []
         for cart in cart_serializer.data:
           product = Product.objects.get(id=cart['product_id'])
           total_price += product.price * cart['count']
-        return Response({'status': 'success', 'carts': cart_serializer.data, 'total_price': total_price}, status=status.HTTP_200_OK)
+          carts.append({
+            **cart,
+            "product": product.title,
+            "price": product.price,
+            "sum": product.price * cart['count'],
+            "image_url": product.image_url,
+          })
+        return Response({'status': 'success', 'carts': carts, 'total_price': total_price}, status=status.HTTP_200_OK)
       except Cart.DoesNotExist:
         return Response({'status': 'error', 'message': 'Cart not found for this user'}, status=status.HTTP_404_NOT_FOUND)
     
@@ -43,8 +51,19 @@ class CartView(APIView):
   def post(self, request):
     cart_serializer = CartSerializer(data = request.data)
     if cart_serializer.is_valid():
-      cart_serializer.save()
-      return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_201_CREATED)  
+      data = request.data
+      carts = Cart.objects.filter(username=data['username'], product_id=data['product_id']).values()
+      if len(carts) == 0:
+        cart_serializer.save()
+        return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_201_CREATED)
+      
+      cart = Cart.objects.get(id=carts.first()['id'])
+      data['count'] += cart.count
+      cart_serializer = CartSerializer(cart, data=data)
+      if cart_serializer.is_valid():
+        cart_serializer.save()
+        return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_201_CREATED)
+      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
     else:
       return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
 

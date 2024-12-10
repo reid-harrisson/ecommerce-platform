@@ -1,13 +1,13 @@
 import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
-// GET /api/cart
+// GET /api/order
 export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access");
     const username = request.nextUrl.searchParams.get("username");
-    let url = `${process.env.BACKEND_API_URL}/cart`;
+    let url = `${process.env.BACKEND_API_URL}/order`;
     if (username) {
       url += `?username=${username}`;
     }
@@ -21,17 +21,20 @@ export async function GET(request: NextRequest) {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: "failed to get carts" }, { status: 500 });
+    return NextResponse.json(
+      { error: "failed to get orders" },
+      { status: 500 }
+    );
   }
 }
 
-// POST /api/cart
+// POST /api/order
 export async function POST(request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access");
     const body = await request.json();
-    const response = await fetch(`${process.env.BACKEND_API_URL}/cart/`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/order/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +47,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
-      { error: "failed to create cart" },
+      { error: "failed to create order" },
       { status: 500 }
     );
   }

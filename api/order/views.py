@@ -33,8 +33,8 @@ class OrderView(APIView):
       except Order.DoesNotExist:
         return Response({'status': 'error', 'message': 'Cart not found for this user'}, status=status.HTTP_404_NOT_FOUND)
     
-    results = Order.objects.all()
-    order_serializer = OrderSerializer(results, many=True)
+    orders = Order.objects.all()
+    order_serializer = OrderSerializer(orders, many=True)
     return Response({'status': 'success', 'carts': order_serializer.data}, status=status.HTTP_200_OK)
 
   def post(self, request):
