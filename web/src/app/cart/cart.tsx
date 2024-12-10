@@ -53,6 +53,25 @@ export default function Cart() {
     fetchCarts();
   }, []);
 
+  async function processOrder() {
+    try {
+      const username = Cookies.get("username");
+      const response = await fetch("/api/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   if (!carts) return <div>Loading...</div>;
 
   return (
@@ -101,16 +120,19 @@ export default function Cart() {
                 ${cart.price.toFixed(2)}
               </TableCell>
               <TableCell className="text-center">
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-1">
                   <Input
                     type="number"
                     placeholder={`${cart.count}`}
                     max={10}
                     min={0}
                     className="w-20"
+                    onChange={(event) => {
+                      event.target.value;
+                    }}
                   />
-                  <Button size="icon" variant="ghost" className="rounded-full">
-                    <Save />
+                  <Button size="icon" className="rounded-full w-6 h-6">
+                    <Check />
                   </Button>
                 </div>
               </TableCell>
@@ -138,7 +160,14 @@ export default function Cart() {
             <TableCell />
             <TableCell />
             <TableCell>
-              <Button className="w-full">Order</Button>
+              <Button
+                className="w-full"
+                onClick={async () => {
+                  await processOrder();
+                }}
+              >
+                Order
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>
