@@ -12,6 +12,7 @@ export function Login() {
   const [token, setToken] = useState<{
     refresh: string;
     access: string;
+    role: string;
   } | null>(null);
   const router = useRouter();
 
@@ -43,6 +44,7 @@ export function Login() {
       Cookies.set("access", token.access);
       Cookies.set("refresh", token.refresh);
       Cookies.set("username", username);
+      Cookies.set("role", token.role);
     }
   }, [token]);
 

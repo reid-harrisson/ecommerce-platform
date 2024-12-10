@@ -43,9 +43,15 @@ export function Layout({ children }: LayoutProps) {
           >
             <PackageOpen /> Products
           </Button>
-          <Button variant="ghost" className="justify-start px-6">
+          <Button
+            variant="ghost"
+            className="justify-start px-6"
+            onClick={() => {
+              router.push("/cart");
+            }}
+          >
             <ShoppingCart /> Shopping Cart
-          </Button>{" "}
+          </Button>
           <p className="text-secondary-foreground opacity-60 text-xs font-medium px-4 pt-4 pb-2">
             Administrator
           </p>

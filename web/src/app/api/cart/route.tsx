@@ -2,12 +2,16 @@ import { NextResponse, NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
 // GET /api/cart
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access");
-    console.log(`Bearer ${accessToken?.value}`);
-    const response = await fetch(`${process.env.BACKEND_API_URL}/cart/`, {
+    const username = request.nextUrl.searchParams.get("username");
+    let url = `${process.env.BACKEND_API_URL}/cart`;
+    if (username) {
+      url += `?username=${username}`;
+    }
+    const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken?.value}`,

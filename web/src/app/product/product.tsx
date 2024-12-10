@@ -22,7 +22,7 @@ interface Product {
   quantity: number;
 }
 
-export default function ProductList() {
+export default function Product() {
   const [products, setProducts] = useState<Product[]>([]);
 
   async function fetchProducts() {
@@ -66,7 +66,7 @@ export default function ProductList() {
               <p className="hidden lg:block">QUANTITY</p>
               <p className="block lg:hidden">COUNT</p>
             </TableHead>
-            <TableHead className="w-8 p-0 sm:px-4"></TableHead>
+            <TableHead className="w-8 p-0 sm:px-4" />
             <TableHead className="p-0 sm:px-2 md:pr-6 w-8">
               <Button
                 variant="ghost"
@@ -81,13 +81,13 @@ export default function ProductList() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {products.map((product, index) => (
             <TableRow
               key={product.id}
               className="cursor-default text-foreground"
             >
               <TableCell className="text-center pl-2 md:pl-6 w-10">
-                {product.id}
+                {index + 1}
               </TableCell>
               <TableCell className="text-center">{product.title}</TableCell>
               <TableCell className="hidden md:table-cell">

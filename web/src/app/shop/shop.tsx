@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 
 interface Product {
   id: number;
@@ -86,6 +87,7 @@ export default function Shop() {
                   addCart(product);
                 }}
               >
+                <ShoppingCart />
                 Add to Cart
               </Button>
             </CardFooter>
