@@ -39,6 +39,8 @@ export default function ProductList() {
     fetchProducts();
   }, []);
 
+  if (!products) return <div>Loading...</div>;
+
   return (
     <Card className="w-full">
       <Table>
@@ -96,7 +98,14 @@ export default function ProductList() {
               </TableCell>
               <TableCell>
                 <div className="flex flex-row gap-2 items-center">
-                  <img src={product.image_url} className="w-8 h-8 rounded-sm" />
+                  <img
+                    src={product.image_url}
+                    className="w-8 h-8 rounded-sm"
+                    onError={(e) =>
+                      ((e.target as HTMLImageElement).src =
+                        "https://via.placeholder.com/200")
+                    }
+                  />
                   <p className="hidden 2xl:block">{product.image_url}</p>
                 </div>
               </TableCell>

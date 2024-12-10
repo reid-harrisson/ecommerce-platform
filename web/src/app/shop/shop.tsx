@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import {
   Card,
   CardContent,
@@ -33,6 +34,27 @@ export default function Shop() {
     }
   }
 
+  async function addCart(product: Product) {
+    const username = Cookies.get("username");
+    try {
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username ? username : "",
+          product_id: product.id,
+          count: 1,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -46,12 +68,26 @@ export default function Shop() {
           <Card key={product.id}>
             <CardHeader>{product.title}</CardHeader>
             <CardContent className="flex flex-col gap-4">
-              <img src={product.image_url} className="rounded-xl" />
+              <img
+                src={product.image_url}
+                className="rounded-xl"
+                onError={(e) =>
+                  ((e.target as HTMLImageElement).src =
+                    "https://via.placeholder.com/200")
+                }
+              />
               <CardDescription>{product.description}</CardDescription>
             </CardContent>
             <CardFooter className="flex flex-row justify-between">
               ${product.price.toFixed(2)}
-              <Button>Add to Cart</Button>
+              <Button
+                onClick={() => {
+                  console.log("sd");
+                  addCart(product);
+                }}
+              >
+                Add to Cart
+              </Button>
             </CardFooter>
           </Card>
         );
