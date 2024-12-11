@@ -27,8 +27,8 @@ export default function Product() {
 
   async function fetchProducts() {
     try {
-      let response = await fetch("/api/product");
-      let data = await response.json();
+      const response = await fetch("/api/product");
+      const data = await response.json();
       setProducts(data.products);
     } catch {
       setProducts([]);
