@@ -1,20 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import Cookies from "js-cookie";
-import { Input } from "@/components/ui/input";
-import { Check, Pencil, Save } from "lucide-react";
 
 interface Order {
   id: number;
@@ -26,23 +21,20 @@ interface Order {
 
 export default function Order() {
   const [carts, setCarts] = useState<Order[]>([]);
-  const [totalPrice, setTotolPrice] = useState(0);
 
-  async function fetchCarts() {
+  async function fetchOrders() {
     try {
-      let url = "/api/order";
-      let response = await fetch(url);
-      let data = await response.json();
+      const url = "/api/order";
+      const response = await fetch(url);
+      const data = await response.json();
       setCarts(data.carts);
-      setTotolPrice(data.total_price);
     } catch {
       setCarts([]);
-      setTotolPrice(0);
     }
   }
 
   useEffect(() => {
-    fetchCarts();
+    fetchOrders();
   }, []);
 
   if (!carts) return <div>Loading...</div>;
@@ -67,7 +59,7 @@ export default function Order() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {carts.map((order, index) => (
+          {carts.map((order) => (
             <TableRow key={order.id} className="cursor-default text-foreground">
               <TableCell className="px-6 py-3">{order.order_id}</TableCell>
               <TableCell className="px-6 py-3">{order.username}</TableCell>

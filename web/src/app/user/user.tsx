@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -9,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 
@@ -26,8 +24,8 @@ export default function User() {
 
   async function fetchUsers() {
     try {
-      let response = await fetch("/api/user");
-      let data = await response.json();
+      const response = await fetch("/api/user");
+      const data = await response.json();
       setUsers(data.users);
     } catch {
       setUsers([]);
@@ -63,7 +61,7 @@ export default function User() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((product, index) => (
+          {users.map((product) => (
             <TableRow
               key={product.username}
               className="cursor-default text-foreground"

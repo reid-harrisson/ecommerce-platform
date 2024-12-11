@@ -14,7 +14,7 @@ export async function GET() {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "failed to get users" }, { status: 500 });
   }
 }

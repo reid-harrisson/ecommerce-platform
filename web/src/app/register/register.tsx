@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { Toaster } from "@/components/ui/toaster";
 
 export function Register() {
   const [username, setUsername] = useState("");
@@ -61,7 +60,7 @@ export function Register() {
         });
         setToken(data);
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Fail",
         variant: "destructive",

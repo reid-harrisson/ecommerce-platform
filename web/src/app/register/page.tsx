@@ -14,9 +14,9 @@ export default function RegisterPage() {
         </div>
         <div>
           <p className="text-primary-foreground text-lg">
-            "An integrated fullstack e-commerce application featuring a Flutter
+            An integrated fullstack e-commerce application featuring a Flutter
             mobile app, a Django REST API backend, and a Next.js admin dashboard
-            for seamless product management and user interaction."
+            for seamless product management and user interaction.
           </p>
         </div>
       </div>

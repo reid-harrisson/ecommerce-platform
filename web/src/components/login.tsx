@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { Toaster } from "./ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 
 export function Login() {
@@ -44,7 +43,7 @@ export function Login() {
         });
         setToken(data);
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Fail",
         variant: "destructive",

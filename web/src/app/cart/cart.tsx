@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import Cookies from "js-cookie";
 import { Input } from "@/components/ui/input";
-import { Check, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Cart {
@@ -39,8 +39,8 @@ export default function Cart() {
       if (username) {
         url += `?username=${username}`;
       }
-      let response = await fetch(url);
-      let data = await response.json();
+      const response = await fetch(url);
+      const data = await response.json();
       setCarts(data.carts);
       setTotolPrice(data.total_price);
     } catch {
@@ -82,7 +82,7 @@ export default function Cart() {
           title: "Success",
           description: "Order is successfully added.",
         });
-    } catch (error) {
+    } catch {
       toast({
         title: "Fail",
         variant: "destructive",
