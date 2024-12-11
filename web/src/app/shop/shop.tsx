@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   id: number;
@@ -24,6 +25,7 @@ interface Product {
 
 export default function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
+  const { toast } = useToast();
 
   async function fetchProducts() {
     try {
@@ -32,6 +34,11 @@ export default function Shop() {
       setProducts(data.products);
     } catch {
       setProducts([]);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed get products.",
+      });
     }
   }
 
@@ -50,9 +57,23 @@ export default function Shop() {
         }),
       });
       const data = await response.json();
-      console.log(data);
+      if (!data.error)
+        toast({
+          title: "Success",
+          description: "Product successfully added to cart.",
+        });
+      else
+        toast({
+          title: "Fail",
+          variant: "destructive",
+          description: "Failed add product to cart.",
+        });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed add product to cart.",
+      });
     }
   }
 
@@ -66,7 +87,7 @@ export default function Shop() {
     <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
       {products.map((product) => {
         return (
-          <Card key={product.id}>
+          <Card key={product.id} className="grid grid-rows-[auto_1fr_auto]">
             <CardHeader>{product.title}</CardHeader>
             <CardContent className="flex flex-col gap-4">
               <img
@@ -83,7 +104,6 @@ export default function Shop() {
               ${product.price.toFixed(2)}
               <Button
                 onClick={() => {
-                  console.log("sd");
                   addCart(product);
                 }}
               >

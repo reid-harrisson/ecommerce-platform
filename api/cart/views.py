@@ -63,9 +63,9 @@ class CartView(APIView):
       if cart_serializer.is_valid():
         cart_serializer.save()
         return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_201_CREATED)
-      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "error": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
     else:
-      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "error": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
 
   def put(self, request, id):
     cart = Cart.objects.get(id = id)
@@ -74,7 +74,7 @@ class CartView(APIView):
       cart_serializer.save()
       return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_200_OK)
     else:
-      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "error": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
 
   def patch(self, request, id):
     cart = Cart.objects.get(id = id)
@@ -83,4 +83,4 @@ class CartView(APIView):
       cart_serializer.save()
       return Response({"status": "success", "cart": cart_serializer.data}, status = status.HTTP_200_OK)
     else:
-      return Response({"status": "error", "data": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "error": cart_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)

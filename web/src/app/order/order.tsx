@@ -52,13 +52,13 @@ export default function Order() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               ID
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               USERNAME
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               PROUDCT ID
             </TableHead>
             <TableHead className="font-semibold text-xs text-center">
@@ -69,9 +69,9 @@ export default function Order() {
         <TableBody>
           {carts.map((order, index) => (
             <TableRow key={order.id} className="cursor-default text-foreground">
-              <TableCell className="text-center">{order.order_id}</TableCell>
-              <TableCell className="text-center">{order.username}</TableCell>
-              <TableCell className="text-center">{order.product_id}</TableCell>
+              <TableCell className="px-6 py-3">{order.order_id}</TableCell>
+              <TableCell className="px-6 py-3">{order.username}</TableCell>
+              <TableCell className="px-6 py-3">{order.product_id}</TableCell>
               <TableCell className="text-center">{order.count}</TableCell>
             </TableRow>
           ))}

@@ -5,7 +5,6 @@ export async function GET() {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access");
-    console.log(`Bearer ${accessToken?.value}`);
     const response = await fetch(`${process.env.BACKEND_API_URL}/product/`, {
       headers: {
         "Content-Type": "application/json",

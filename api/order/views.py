@@ -21,7 +21,7 @@ class OrderView(APIView):
         order_serializer = OrderSerializer(orders, many=True)
         return Response({'status': 'success', 'order': order_serializer.data}, status=status.HTTP_200_OK)
       except Order.DoesNotExist:
-        return Response({'status': 'error', 'message': 'Cart not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'status': 'error', 'error': 'Cart not found'}, status=status.HTTP_404_NOT_FOUND)
     
     username = request.GET.get('username')
 
@@ -31,7 +31,7 @@ class OrderView(APIView):
         order_serializer = OrderSerializer(orders, many=True)
         return Response({'status': 'success', 'carts': order_serializer.data}, status=status.HTTP_200_OK)
       except Order.DoesNotExist:
-        return Response({'status': 'error', 'message': 'Cart not found for this user'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'status': 'error', 'error': 'Cart not found for this user'}, status=status.HTTP_404_NOT_FOUND)
     
     orders = Order.objects.all()
     order_serializer = OrderSerializer(orders, many=True)
@@ -56,6 +56,6 @@ class OrderView(APIView):
         order_serializer.save()
         return Response({"status": "success", "order": order_serializer.data}, status=status.HTTP_201_CREATED)
       else:
-        return Response({"status": "error", "data": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"status": "error", "error": order_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     else:
-      return Response({"status": "error", "data": cart_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+      return Response({"status": "error", "error": cart_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
