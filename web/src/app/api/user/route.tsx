@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("access");
-    const response = await fetch(`${process.env.BACKEND_API_URL}/product/`, {
+    const response = await fetch(`${process.env.BACKEND_API_URL}/user/`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken?.value}`,
@@ -15,9 +15,6 @@ export async function GET() {
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json(
-      { error: "failed to get products" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "failed to get users" }, { status: 500 });
   }
 }

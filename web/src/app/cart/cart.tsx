@@ -5,7 +5,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -14,7 +13,8 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import Cookies from "js-cookie";
 import { Input } from "@/components/ui/input";
-import { Check, Pencil, Save } from "lucide-react";
+import { Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Cart {
   id: number;
@@ -30,6 +30,7 @@ interface Cart {
 export default function Cart() {
   const [carts, setCarts] = useState<Cart[]>([]);
   const [totalPrice, setTotolPrice] = useState(0);
+  const { toast } = useToast();
 
   async function fetchCarts() {
     try {
@@ -38,7 +39,6 @@ export default function Cart() {
       if (username) {
         url += `?username=${username}`;
       }
-      console.log(url);
       let response = await fetch(url);
       let data = await response.json();
       setCarts(data.carts);
@@ -46,6 +46,11 @@ export default function Cart() {
     } catch {
       setCarts([]);
       setTotolPrice(0);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed get products.",
+      });
     }
   }
 
@@ -66,9 +71,23 @@ export default function Cart() {
         }),
       });
       const data = await response.json();
-      console.log(data);
+      if (data.error)
+        toast({
+          title: "Fail",
+          variant: "destructive",
+          description: "Failed get products.",
+        });
+      else
+        toast({
+          title: "Success",
+          description: "Order is successfully added.",
+        });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed get products.",
+      });
     }
   }
 

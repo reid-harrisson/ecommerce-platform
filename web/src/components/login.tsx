@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { Toaster } from "./ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -13,8 +15,10 @@ export function Login() {
     refresh: string;
     access: string;
     role: string;
+    fullname: string;
   } | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
 
   async function loginUser() {
     try {
@@ -27,13 +31,25 @@ export function Login() {
       });
       const data = await response.json();
       if (data.error) {
-        console.log("failed to login: ", data.error);
+        toast({
+          title: "Fail",
+          variant: "destructive",
+          description: "Failed to login.",
+        });
         setToken(null);
       } else {
+        toast({
+          title: "Success",
+          description: "User successfully sign in.",
+        });
         setToken(data);
       }
     } catch (error) {
-      console.log("failed to login: ", error);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed to login.",
+      });
       setToken(null);
     }
   }
@@ -44,6 +60,7 @@ export function Login() {
       Cookies.set("access", token.access);
       Cookies.set("refresh", token.refresh);
       Cookies.set("username", username);
+      Cookies.set("fullname", token.fullname);
       Cookies.set("role", token.role);
     }
   }, [token]);
@@ -77,7 +94,12 @@ export function Login() {
         >
           Log In
         </Button>
-        <Button className="text-base bg-secondary-foreground hover:bg-secondary-foreground hover:opacity-90">
+        <Button
+          className="text-base bg-secondary-foreground hover:bg-secondary-foreground hover:opacity-90"
+          onClick={() => {
+            router.push("/register");
+          }}
+        >
           Register
         </Button>
       </div>

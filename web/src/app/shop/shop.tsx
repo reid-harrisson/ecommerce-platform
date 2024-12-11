@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   id: number;
@@ -24,6 +25,7 @@ interface Product {
 
 export default function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
+  const { toast } = useToast();
 
   async function fetchProducts() {
     try {
@@ -32,6 +34,11 @@ export default function Shop() {
       setProducts(data.products);
     } catch {
       setProducts([]);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed get products.",
+      });
     }
   }
 
@@ -50,9 +57,23 @@ export default function Shop() {
         }),
       });
       const data = await response.json();
-      console.log(data);
+      if (!data.error)
+        toast({
+          title: "Success",
+          description: "Product successfully added to cart.",
+        });
+      else
+        toast({
+          title: "Fail",
+          variant: "destructive",
+          description: "Failed add product to cart.",
+        });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Fail",
+        variant: "destructive",
+        description: "Failed add product to cart.",
+      });
     }
   }
 
@@ -83,7 +104,6 @@ export default function Shop() {
               ${product.price.toFixed(2)}
               <Button
                 onClick={() => {
-                  console.log("sd");
                   addCart(product);
                 }}
               >
