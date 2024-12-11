@@ -4,9 +4,12 @@ import { ThemeChanger } from "@/components/theme-changer";
 import { Button } from "@/components/ui/button";
 import {
   BugPlay,
+  Cookie,
+  LogOut,
   NotebookPen,
   PackageOpen,
   ScrollText,
+  Settings,
   ShoppingBag,
   ShoppingBasket,
   ShoppingCart,
@@ -28,15 +31,32 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="grid grid-rows-[auto_1fr] h-full">
-      <Card className="grid grid-cols-[auto_1fr_auto_auto] items-center px-8 py-4 gap-2 z-20">
+      <Card className="grid grid-cols-[auto_1fr_auto_auto_auto_auto] items-center px-8 py-4 gap-1 z-20">
         <ShoppingBag size={24} color="hsl(var(--primary))" />
-        <h1 className="font-semibold text-xl text-secondary-foreground">
+        <h1 className="font-semibold text-xl text-secondary-foreground tracking-tight">
           Ecommerce Platform
         </h1>
         <p>
           {username && username.charAt(0).toUpperCase() + username.slice(1)} -{" "}
           {role && role.charAt(0).toUpperCase() + role.slice(1)}
         </p>
+        <Button size="icon" variant="ghost" className="rounded-full">
+          <Settings />
+        </Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="rounded-full"
+          onClick={() => {
+            router.push("/");
+            Cookies.remove("user");
+            Cookies.remove("role");
+            Cookies.remove("acccess");
+            Cookies.remove("refresh");
+          }}
+        >
+          <LogOut />
+        </Button>
         <ThemeChanger />
       </Card>
       <div className="grid grid-cols-[max-content_1fr] overflow-hidden">
