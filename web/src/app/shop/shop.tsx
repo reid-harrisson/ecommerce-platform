@@ -9,7 +9,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -29,8 +28,8 @@ export default function Shop() {
 
   async function fetchProducts() {
     try {
-      let response = await fetch("/api/product");
-      let data = await response.json();
+      const response = await fetch("/api/product");
+      const data = await response.json();
       setProducts(data.products);
     } catch {
       setProducts([]);
@@ -68,7 +67,7 @@ export default function Shop() {
           variant: "destructive",
           description: "Failed add product to cart.",
         });
-    } catch (error) {
+    } catch {
       toast({
         title: "Fail",
         variant: "destructive",
