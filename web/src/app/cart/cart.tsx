@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import Cookies from "js-cookie";
 import { Input } from "@/components/ui/input";
-import { Check } from "lucide-react";
+import { Check, Minus, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Cart {
@@ -98,22 +98,16 @@ export default function Cart() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold text-xs text-center">
-              ID
-            </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6">ID</TableHead>
+            <TableHead className="font-semibold text-xs px-6">
               PROUDCT
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
-              IMAGE
-            </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
-              PRICE
-            </TableHead>
+            <TableHead className="font-semibold text-xs px-6">IMAGE</TableHead>
+            <TableHead className="font-semibold text-xs px-6">PRICE</TableHead>
             <TableHead className="font-semibold text-xs text-center">
               COUNT
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6">
               SUBTOTAL
             </TableHead>
           </TableRow>
@@ -121,66 +115,48 @@ export default function Cart() {
         <TableBody>
           {carts.map((cart, index) => (
             <TableRow key={cart.id} className="cursor-default text-foreground">
-              <TableCell className="text-center">{index + 1}</TableCell>
-              <TableCell className="text-center">{cart.product}</TableCell>
-              <TableCell className="text-center">
-                <div className="flex items-center justify-center">
-                  <img
-                    src={cart.image_url}
-                    className="w-14 h-14 rounded-xl"
-                    onError={(e) =>
-                      ((e.target as HTMLImageElement).src =
-                        "https://via.placeholder.com/200")
-                    }
-                  />
-                </div>
+              <TableCell className="px-6">{index + 1}</TableCell>
+              <TableCell className="px-6">{cart.product}</TableCell>
+              <TableCell className="px-6">
+                <img
+                  src={cart.image_url}
+                  className="w-12 h-12 rounded-xl"
+                  onError={(e) =>
+                    ((e.target as HTMLImageElement).src =
+                      "https://via.placeholder.com/200")
+                  }
+                />
               </TableCell>
-              <TableCell className="text-center">
-                ${cart.price.toFixed(2)}
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex items-center justify-center gap-1">
+              <TableCell className="px-6">${cart.price.toFixed(2)}</TableCell>
+              <TableCell className="px-6">
+                <div className="flex items-center gap-1 justify-center">
+                  <Button size="icon" className="rounded-full w-5 h-5">
+                    <Minus size={12} />
+                  </Button>
                   <Input
+                    defaultValue={cart.count}
                     type="number"
-                    placeholder={`${cart.count}`}
-                    max={10}
-                    min={0}
-                    className="w-20"
-                    onChange={(event) => {
-                      event.target.value;
-                    }}
+                    className="w-14 px-2"
                   />
-                  <Button size="icon" className="rounded-full w-6 h-6">
-                    <Check />
+                  <Button size="icon" className="rounded-full w-5 h-5">
+                    <Plus size={12} />
                   </Button>
                 </div>
               </TableCell>
-              <TableCell className="text-center">
-                ${cart.sum.toFixed(2)}
-              </TableCell>
+              <TableCell className="px-6">${cart.sum.toFixed(2)}</TableCell>
             </TableRow>
           ))}
           <TableRow className="text-foreground">
-            <TableCell />
-            <TableCell />
-            <TableCell />
-            <TableCell />
+            <TableCell colSpan={4} />
             <TableCell className="font-semibold text-xs text-center">
               TOTAL
             </TableCell>
-            <TableCell className="text-center">
-              ${totalPrice.toFixed(2)}
-            </TableCell>
+            <TableCell className="px-6">${totalPrice.toFixed(2)}</TableCell>
           </TableRow>
           <TableRow>
-            <TableCell />
-            <TableCell />
-            <TableCell />
-            <TableCell />
-            <TableCell />
-            <TableCell>
+            <TableCell colSpan={5} />
+            <TableCell className="px-6">
               <Button
-                className="w-full"
                 onClick={async () => {
                   await processOrder();
                 }}

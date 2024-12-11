@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   ShoppingBasket,
   ShoppingCart,
+  Users,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -124,7 +125,7 @@ export function Layout({ children }: LayoutProps) {
               router.push("/user");
             }}
           >
-            <ScrollText /> User Management
+            <Users /> User Management
           </Button>
         </Card>
         <ScrollArea className="bg-muted h-full">

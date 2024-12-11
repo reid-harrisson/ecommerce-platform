@@ -45,19 +45,19 @@ export default function User() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               USERNAME
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               EMAIL
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               FIRST NAME
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               LAST NAME
             </TableHead>
-            <TableHead className="font-semibold text-xs text-center">
+            <TableHead className="font-semibold text-xs px-6 py-3">
               ROLE
             </TableHead>
           </TableRow>
@@ -68,13 +68,11 @@ export default function User() {
               key={product.username}
               className="cursor-default text-foreground"
             >
-              <TableCell className="text-center">{product.username}</TableCell>
-              <TableCell className="text-center">{product.email}</TableCell>
-              <TableCell className="text-center">
-                {product.first_name}
-              </TableCell>
-              <TableCell className="text-center">{product.last_name}</TableCell>
-              <TableCell className="text-center">{product.role}</TableCell>
+              <TableCell className="px-6 py-3">{product.username}</TableCell>
+              <TableCell className="px-6 py-3">{product.email}</TableCell>
+              <TableCell className="px-6 py-3">{product.first_name}</TableCell>
+              <TableCell className="px-6 py-3">{product.last_name}</TableCell>
+              <TableCell className="px-6 py-3">{product.role}</TableCell>
             </TableRow>
           ))}
         </TableBody>

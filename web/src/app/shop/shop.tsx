@@ -87,7 +87,7 @@ export default function Shop() {
     <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
       {products.map((product) => {
         return (
-          <Card key={product.id}>
+          <Card key={product.id} className="grid grid-rows-[auto_1fr_auto]">
             <CardHeader>{product.title}</CardHeader>
             <CardContent className="flex flex-col gap-4">
               <img
