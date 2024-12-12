@@ -1,3 +1,7 @@
-Django
-djangorestframework
-djangorestframework-simplejwt
+asgiref==3.8.1
+Django==5.1.4
+djangorestframework==3.15.2
+psycopg==3.2.3
+python-dotenv==1.0.1
+sqlparse==0.5.3
+tzdata==2024.2
