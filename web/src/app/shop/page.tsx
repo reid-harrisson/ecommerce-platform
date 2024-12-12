@@ -3,7 +3,7 @@ import Shop from "./shop";
 
 export default async function ShopPage() {
   return (
-    <Layout>
+    <Layout page="shop">
       <h2 className="font-medium text-lg text-secondary-foreground">
         Products
       </h2>

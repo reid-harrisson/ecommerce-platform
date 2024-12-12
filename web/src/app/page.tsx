@@ -1,6 +1,7 @@
 import { ThemeChanger } from "@/components/theme-changer";
 import { ShoppingBag } from "lucide-react";
 import { Login } from "@/components/login";
+import { Card } from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -20,14 +21,14 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className="grid grid-rows-[max-content_1fr] bg-background">
+      <Card className="grid grid-rows-[max-content_1fr] bg-background">
         <div className="w-full h-16 px-4 flex flex-row justify-end items-center">
           <ThemeChanger />
         </div>
         <div className="flex flex-col items-center justify-center pb-16 gap-2">
           <Login />
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

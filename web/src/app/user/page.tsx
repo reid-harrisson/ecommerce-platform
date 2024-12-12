@@ -3,7 +3,7 @@ import User from "./user";
 
 export default async function UserPage() {
   return (
-    <Layout>
+    <Layout page="user">
       <h2 className="font-medium text-lg text-secondary-foreground">
         Products
       </h2>

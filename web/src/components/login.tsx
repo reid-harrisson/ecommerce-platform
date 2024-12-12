@@ -6,10 +6,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 export function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState<{
     refresh: string;
     access: string;
@@ -29,6 +31,7 @@ export function Login() {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
+      setIsLoading(false);
       if (data.error) {
         toast({
           title: "Fail",
@@ -50,6 +53,7 @@ export function Login() {
         description: "Failed to login.",
       });
       setToken(null);
+      setIsLoading(false);
     }
   }
 
@@ -88,9 +92,12 @@ export function Login() {
         <Button
           className="text-base"
           onClick={async () => {
+            setIsLoading(true);
             await loginUser();
           }}
+          disabled={isLoading}
         >
+          {isLoading && <Loader2 className="animate-spin" />}
           Log In
         </Button>
         <Button

@@ -1,17 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ShopItem from "./item";
+import ShopSkeleton from "./skeleton";
 
 interface Product {
   id: number;
@@ -25,94 +17,37 @@ interface Product {
 export default function Shop() {
   const [products, setProducts] = useState<Product[]>([]);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
-  async function fetchProducts() {
-    try {
-      const response = await fetch("/api/product");
-      const data = await response.json();
-      setProducts(data.products);
-    } catch {
-      setProducts([]);
-      toast({
-        title: "Fail",
-        variant: "destructive",
-        description: "Failed get products.",
-      });
-    }
-  }
-
-  async function addCart(product: Product) {
-    const username = Cookies.get("username");
-    try {
-      const response = await fetch("/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username ? username : "",
-          product_id: product.id,
-          count: 1,
-        }),
-      });
-      const data = await response.json();
-      if (!data.error)
-        toast({
-          title: "Success",
-          description: "Product successfully added to cart.",
-        });
-      else
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/product");
+        const data = await response.json();
+        setProducts(data.products);
+      } catch {
+        setProducts([]);
         toast({
           title: "Fail",
           variant: "destructive",
-          description: "Failed add product to cart.",
+          description: "Failed to get products.",
         });
-    } catch {
-      toast({
-        title: "Fail",
-        variant: "destructive",
-        description: "Failed add product to cart.",
-      });
-    }
-  }
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  useEffect(() => {
     fetchProducts();
   }, []);
 
-  if (!products) return <div>Loading...</div>;
-
   return (
     <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-      {products.map((product) => {
-        return (
-          <Card key={product.id} className="grid grid-rows-[auto_1fr_auto]">
-            <CardHeader>{product.title}</CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <img
-                src={product.image_url}
-                className="rounded-xl"
-                onError={(e) =>
-                  ((e.target as HTMLImageElement).src =
-                    "https://via.placeholder.com/200")
-                }
-              />
-              <CardDescription>{product.description}</CardDescription>
-            </CardContent>
-            <CardFooter className="flex flex-row justify-between">
-              ${product.price.toFixed(2)}
-              <Button
-                onClick={() => {
-                  addCart(product);
-                }}
-              >
-                <ShoppingCart />
-                Add to Cart
-              </Button>
-            </CardFooter>
-          </Card>
-        );
-      })}
+      {isLoading
+        ? Array.from({ length: 3 }, (_, i) => <ShopSkeleton key={i} />)
+        : products.map((product) => (
+            <ShopItem key={product.id} product={product} />
+          ))}
     </div>
   );
 }
