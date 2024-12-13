@@ -16,6 +16,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,8 +25,8 @@ interface LayoutProps {
 
 export function Layout({ children, page }: LayoutProps) {
   const router = useRouter();
-  const role = Cookies.get("role") || "guest";
-  const fullname = Cookies.get("fullname") || "";
+  const [role, setRole] = useState("guest");
+  const [fullname, setFullname] = useState("");
 
   const handleLogout = () => {
     router.push("/");
@@ -53,6 +54,11 @@ export function Layout({ children, page }: LayoutProps) {
     </Button>
   );
 
+  useEffect(() => {
+    setFullname(Cookies.get("fullname") || "");
+    setRole(Cookies.get("role") || "guest");
+  }, []);
+
   return (
     <div className="grid grid-rows-[auto_1fr] h-full">
       <Card className="grid grid-cols-[auto_1fr_auto_auto_auto_auto] items-center px-8 py-4 gap-1 z-20">
@@ -61,15 +67,10 @@ export function Layout({ children, page }: LayoutProps) {
           Ecommerce Platform
         </h1>
         <p className="font-medium text-sm">{fullname}</p>
-        <Button size="icon" variant="ghost" className="rounded-full">
+        <Button size="icon" variant="ghost">
           <Settings />
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="rounded-full"
-          onClick={handleLogout}
-        >
+        <Button size="icon" variant="ghost" onClick={handleLogout}>
           <LogOut />
         </Button>
         <ThemeChanger />

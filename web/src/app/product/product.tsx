@@ -42,8 +42,6 @@ export default function Product() {
     fetchProducts();
   }, []);
 
-  if (!products) return <div>Loading...</div>;
-
   return (
     <Card className="w-full">
       {isLoading ? (

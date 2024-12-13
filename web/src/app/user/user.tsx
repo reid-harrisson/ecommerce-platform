@@ -11,13 +11,15 @@ import {
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { UserSheet } from "./sheet";
 
 interface User {
   username: string;
   email: string;
   first_name: string;
   last_name: string;
-  role: string;
+  role: "user" | "manager" | "admin";
 }
 
 export default function User() {
@@ -28,8 +30,10 @@ export default function User() {
     setIsLoading(true);
     try {
       const response = await fetch("/api/user");
-      const data = await response.json();
-      setUsers(data.users);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.users) setUsers(data.users);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -84,21 +88,30 @@ export default function User() {
               <TableHead className="font-semibold text-xs px-6 py-3">
                 ROLE
               </TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((product) => (
+            {users.map((user, index) => (
               <TableRow
-                key={product.username}
+                key={user.username}
                 className="cursor-default text-foreground"
               >
-                <TableCell className="px-6 py-3">{product.username}</TableCell>
-                <TableCell className="px-6 py-3">{product.email}</TableCell>
+                <TableCell className="px-6 py-3">{user.username}</TableCell>
+                <TableCell className="px-6 py-3">{user.email}</TableCell>
+                <TableCell className="px-6 py-3">{user.first_name}</TableCell>
+                <TableCell className="px-6 py-3">{user.last_name}</TableCell>
                 <TableCell className="px-6 py-3">
-                  {product.first_name}
+                  <Badge variant={user.role}>{user.role}</Badge>
                 </TableCell>
-                <TableCell className="px-6 py-3">{product.last_name}</TableCell>
-                <TableCell className="px-6 py-3">{product.role}</TableCell>
+                <TableCell>
+                  <UserSheet
+                    user={user}
+                    updateUser={() => {
+                      fetchUsers();
+                    }}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -24,8 +24,10 @@ export default function Shop() {
       setIsLoading(true);
       try {
         const response = await fetch("/api/product");
-        const data = await response.json();
-        setProducts(data.products);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.products) setProducts(data.products);
+        }
       } catch {
         setProducts([]);
         toast({
