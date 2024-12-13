@@ -18,6 +18,21 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name']
         )
         return user
+    
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Product` instance, given the validated data. 
+        """  
+        instance.username = validated_data.get('username', instance.username)  
+        instance.email = validated_data.get('email', instance.email)
+        data = validated_data.get('password','')
+        if data != '':
+            instance.set_password(validated_data.get('password'))
+        instance.first_name = validated_data.get('first_name', instance.first_name)  
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+  
+        instance.save()
+        return instance
 
 class UserDetailSerializer(serializers.ModelSerializer):  
     username = serializers.CharField(max_length=20, required=True)  

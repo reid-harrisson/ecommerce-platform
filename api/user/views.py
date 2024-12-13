@@ -27,11 +27,11 @@ class UserView(APIView):
 
         return Response({'status': 'success', 'users': data}, status = status.HTTP_200_OK)
         
-    def put(self, request):
+    def patch(self, request):
         data = request.data
         user = User.objects.get(username = data["username"])
         userdetail = UserDetail.objects.get(username = data["username"])
-        user_serializer = UserSerializer(user, data = data)
+        user_serializer = UserSerializer(user, data = data, partial = True)
         userdetail_serializer = UserDetailSerializer(userdetail, data = data)
 
         if user_serializer.is_valid() and userdetail_serializer.is_valid():
