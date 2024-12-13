@@ -26,8 +26,23 @@ class UserView(APIView):
             })
 
         return Response({'status': 'success', 'users': data}, status = status.HTTP_200_OK)
-
         
+    def put(self, request):
+        data = request.data
+        user = User.objects.get(username = data["username"])
+        userdetail = UserDetail.objects.get(username = data["username"])
+        user_serializer = UserSerializer(user, data = data)
+        userdetail_serializer = UserDetailSerializer(userdetail, data = data)
+
+        if user_serializer.is_valid() and userdetail_serializer.is_valid():
+          user_serializer.save()
+          userdetail_serializer.save()
+          data = user_serializer.data
+          data["role"] = userdetail_serializer.data["role"]
+          return Response({"status": "success", "user": data }, status = status.HTTP_200_OK)  
+        else:
+          return Response({"status": "error", "user": user_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+
 
 class RegisterView(APIView):
     authentication_classes = []
