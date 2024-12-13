@@ -7,10 +7,25 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "./ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const formSchema = z.object({
+  username: z.string().min(2).max(50),
+  password: z.string().min(0).max(50),
+});
 
 export function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState<{
     refresh: string;
@@ -21,14 +36,23 @@ export function Login() {
   const router = useRouter();
   const { toast } = useToast();
 
-  async function loginUser() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify(values),
       });
       const data = await response.json();
       setIsLoading(false);
@@ -62,53 +86,63 @@ export function Login() {
       router.push("/shop");
       Cookies.set("access", token.access);
       Cookies.set("refresh", token.refresh);
-      Cookies.set("username", username);
+      Cookies.set("username", form.getValues("username"));
       Cookies.set("fullname", token.fullname);
       Cookies.set("role", token.role);
     }
   }, [token]);
 
   return (
-    <>
-      <h1 className="font-semibold text-2xl text-secondary-foreground">
-        Log In
-      </h1>
-      <p className="w-80">Username</p>
-      <Input
-        className="w-80"
-        onChange={(event) => {
-          setUsername(event.target.value);
-        }}
-      />
-      <p className="w-80">Password</p>
-      <Input
-        className="w-80"
-        type="password"
-        onChange={(event) => {
-          setPassword(event.target.value);
-        }}
-      />
-      <div className="w-80 my-2 grid grid-cols-2 gap-4">
-        <Button
-          className="text-base"
-          onClick={async () => {
-            setIsLoading(true);
-            await loginUser();
-          }}
-          disabled={isLoading}
-        >
-          {isLoading && <Loader2 className="animate-spin" />}
-          Log In
-        </Button>
-        <Button
-          className="text-base bg-secondary-foreground hover:bg-secondary-foreground hover:opacity-90"
-          onClick={() => {
-            router.push("/register");
-          }}
-        >
-          Register
-        </Button>
-      </div>
-    </>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 w-80"
+      >
+        <h1 className="text-center font-semibold text-lg">Sign In</h1>
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="grid grid-cols-2 gap-4 py-2">
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Log In
+          </Button>
+          <Button
+            type="button"
+            className="bg-secondary-foreground hover:bg-secondary-foreground hover:opacity-90"
+            onClick={() => router.push("/register")}
+          >
+            Register
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
