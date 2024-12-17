@@ -7,7 +7,6 @@ import {
   NotebookPen,
   ScrollText,
   Settings,
-  ShoppingBag,
   ShoppingBasket,
   ShoppingCart,
   Users,
@@ -16,6 +15,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useState, useEffect } from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,8 +24,8 @@ interface LayoutProps {
 
 export function Layout({ children, page }: LayoutProps) {
   const router = useRouter();
-  const role = Cookies.get("role") || "guest";
-  const fullname = Cookies.get("fullname") || "";
+  const [role, setRole] = useState("guest");
+  const [fullname, setFullname] = useState("");
 
   const handleLogout = () => {
     router.push("/");
@@ -53,23 +53,23 @@ export function Layout({ children, page }: LayoutProps) {
     </Button>
   );
 
+  useEffect(() => {
+    setFullname(Cookies.get("fullname") || "");
+    setRole(Cookies.get("role") || "guest");
+  }, []);
+
   return (
     <div className="grid grid-rows-[auto_1fr] h-full">
       <Card className="grid grid-cols-[auto_1fr_auto_auto_auto_auto] items-center px-8 py-4 gap-1 z-20">
-        <ShoppingBag size={24} color="hsl(var(--primary))" />
-        <h1 className="font-semibold text-xl text-secondary-foreground tracking-tight">
-          Ecommerce Platform
+        <img src="logo.svg" className="h-10 dark:hue-rotate-[330deg]" />
+        <h1 className="text-secondary-foreground text-lg font-bold font-avenirnext mt-1 ml-[-4px]">
+          commerce
         </h1>
         <p className="font-medium text-sm">{fullname}</p>
-        <Button size="icon" variant="ghost" className="rounded-full">
+        <Button size="icon" variant="ghost">
           <Settings />
         </Button>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="rounded-full"
-          onClick={handleLogout}
-        >
+        <Button size="icon" variant="ghost" onClick={handleLogout}>
           <LogOut />
         </Button>
         <ThemeChanger />
@@ -77,7 +77,7 @@ export function Layout({ children, page }: LayoutProps) {
       <div className="grid grid-cols-[max-content_1fr] overflow-hidden">
         <Card className="py-2 z-10 flex flex-col">
           {(role == "admin" || role == "manager") && (
-            <p className="text-secondary-foreground opacity-60 text-xs font-medium px-4 pt-4 pb-2">
+            <p className="text-secondary-foreground opacity-60 dark:opacity-90 text-xs font-medium px-4 pt-4 pb-2">
               Customer
             </p>
           )}
@@ -96,7 +96,7 @@ export function Layout({ children, page }: LayoutProps) {
             page == "cart"
           )}
           {(role == "admin" || role == "manager") && (
-            <p className="text-secondary-foreground opacity-60 text-xs font-medium px-4 pt-4 pb-2">
+            <p className="text-secondary-foreground opacity-60 dark:opacity-90 text-xs font-medium px-4 pt-4 pb-2">
               Manager
             </p>
           )}
@@ -115,7 +115,7 @@ export function Layout({ children, page }: LayoutProps) {
             page == "order"
           )}
           {role == "admin" && (
-            <p className="text-secondary-foreground opacity-60 text-xs font-medium px-4 pt-4 pb-2">
+            <p className="text-secondary-foreground opacity-60 dark:opacity-90 text-xs font-medium px-4 pt-4 pb-2">
               Administrator
             </p>
           )}

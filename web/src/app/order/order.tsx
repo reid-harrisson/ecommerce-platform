@@ -30,7 +30,7 @@ export default function Order() {
       const url = "/api/order";
       const response = await fetch(url);
       const data = await response.json();
-      setOrders(data.carts);
+      if (response.ok && data.carts) setOrders(data.carts);
     } finally {
       setIsLoading(false);
     }

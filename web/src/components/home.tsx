@@ -1,5 +1,4 @@
 import { ThemeChanger } from "@/components/theme-changer";
-import { ShoppingBag } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface HomeProps {
@@ -10,11 +9,21 @@ export default function Home({ children }: HomeProps) {
   return (
     <div className="w-full h-full grid grid-cols-1 md:grid-cols-2">
       <div className="bg-secondary-foreground h-full px-12 py-12 hidden md:flex md:flex-col justify-between">
-        <div className="flex flex-row gap-2 items-center">
-          <ShoppingBag className="text-primary" size={24} />
-          <h1 className="text-primary-foreground text-xl font-medium tracking-tight">
-            Ecommerce Platform
+        <div className="flex flex-row items-center">
+          <img
+            src="logo.svg"
+            className="h-16 saturate-[0.6] dark:brightness-[0.2]"
+          />
+          <h1 className="text-primary-foreground text-2xl font-bold font-avenirnext mt-2">
+            commerce
           </h1>
+        </div>
+        <div className="overflow-hidden flex justify-center">
+          <img
+            src="login.svg"
+            alt="Login Background"
+            className="min-w-[550px] scale-125 opacity-80"
+          />
         </div>
         <div>
           <p className="text-primary-foreground">

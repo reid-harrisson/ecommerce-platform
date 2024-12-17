@@ -5,7 +5,7 @@ export default async function UserPage() {
   return (
     <Layout page="user">
       <h2 className="font-medium text-lg text-secondary-foreground">
-        Products
+        User Management
       </h2>
       <User />
     </Layout>

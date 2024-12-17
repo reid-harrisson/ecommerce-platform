@@ -95,7 +95,7 @@ export function Login() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2 w-80"
+        className="flex flex-col gap-2 w-72"
       >
         <h1 className="text-center font-semibold text-lg">Sign In</h1>
         <FormField
