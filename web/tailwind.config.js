@@ -70,6 +70,7 @@ module.exports = {
 			},
 			fontFamily: {
 				worksans: 'Work Sans',
+				avenirnext: 'Avenir Next',
 			}
 		}
 	},
