@@ -1,13 +1,7 @@
 from rest_framework import serializers  
 from .models import Product  
-  
-class ProductSerializer(serializers.ModelSerializer):  
-    title = serializers.CharField(max_length=50, required=True)  
-    description = serializers.CharField(max_length=500, required=True)  
-    image_url = serializers.CharField(max_length=200, required=True)  
-    price = serializers.FloatField()  
-    quantity = serializers.IntegerField()  
 
+class ProductSerializer(serializers.ModelSerializer):  
     class Meta:  
         model = Product  
         fields = ('__all__') 
@@ -22,11 +16,7 @@ class ProductSerializer(serializers.ModelSerializer):
         """
         Update and return an existing `Product` instance, given the validated data. 
         """  
-        instance.title = validated_data.get('title', instance.title)  
-        instance.description = validated_data.get('description', instance.description)  
-        instance.image_url = validated_data.get('image_url', instance.image_url)  
-        instance.price = validated_data.get('price', instance.price)  
-        instance.quantity = validated_data.get('quantity', instance.quantity)  
-  
+        for field, value in validated_data.items():
+            setattr(instance, field, value)
         instance.save()
         return instance
