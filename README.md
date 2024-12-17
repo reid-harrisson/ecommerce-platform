@@ -1,4 +1,4 @@
-# <div style="display: flex; align-items: center; color: #2d3c7a;"> <img src="web/public/logo.svg" style="width: 80px;" alt="Logo"/> commerce <b style="color: white; padding: 8px">platform</b> </div>
+# Ecommerce platform
 
 ## How to Run the Application
 
