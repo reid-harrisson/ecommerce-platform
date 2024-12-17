@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Product from "./product";
 import { Layout } from "@/components/layout";
 

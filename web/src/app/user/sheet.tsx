@@ -121,7 +121,7 @@ export function UserSheet({
         <SheetHeader>
           <SheetTitle>Edit User</SheetTitle>
           <SheetDescription className="py-2">
-            Make changes to the uses here. Click save when you're done.
+            {"Make changes to the uses here. Click save when you're done."}
           </SheetDescription>
           <Form {...form}>
             <form

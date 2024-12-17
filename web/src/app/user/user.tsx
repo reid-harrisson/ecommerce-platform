@@ -92,7 +92,7 @@ export default function User() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.map((user, index) => (
+            {users.map((user) => (
               <TableRow
                 key={user.username}
                 className="cursor-default text-foreground"

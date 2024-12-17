@@ -7,7 +7,6 @@ import {
   NotebookPen,
   ScrollText,
   Settings,
-  ShoppingBag,
   ShoppingBasket,
   ShoppingCart,
   Users,
