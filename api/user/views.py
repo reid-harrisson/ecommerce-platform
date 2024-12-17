@@ -14,34 +14,34 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        users = User.objects.all()
-        user_serializers = UserSerializer(users, many = True)
-        users = user_serializers.data
+        users = User.objects.all().order_by('username')
+        user_serializers = UserSerializer(users, many=True)
+        users_data = user_serializers.data
         data = []
-        for user in users:
-            userdetail = UserDetail.objects.get(username=user['username'])
+        for user_data in users_data:
+            userdetail = UserDetail.objects.get(username=user_data['username'])
             data.append({
-                **user,
+                **user_data,
                 'role': userdetail.role,
             })
 
-        return Response({'status': 'success', 'users': data}, status = status.HTTP_200_OK)
+        return Response({'status': 'success', 'users': data}, status=status.HTTP_200_OK)
         
     def patch(self, request):
         data = request.data
-        user = User.objects.get(username = data["username"])
-        userdetail = UserDetail.objects.get(username = data["username"])
-        user_serializer = UserSerializer(user, data = data, partial = True)
-        userdetail_serializer = UserDetailSerializer(userdetail, data = data)
+        user = User.objects.get(username=data["username"])
+        userdetail = UserDetail.objects.get(username=data["username"])
+        user_serializer = UserSerializer(user, data=data, partial=True)
+        userdetail_serializer = UserDetailSerializer(userdetail, data=data)
 
         if user_serializer.is_valid() and userdetail_serializer.is_valid():
           user_serializer.save()
           userdetail_serializer.save()
-          data = user_serializer.data
-          data["role"] = userdetail_serializer.data["role"]
-          return Response({"status": "success", "user": data }, status = status.HTTP_200_OK)  
+          user_data = user_serializer.data
+          user_data["role"] = userdetail_serializer.data["role"]
+          return Response({"status": "success", "user": user_data }, status=status.HTTP_200_OK)  
         else:
-          return Response({"status": "error", "user": user_serializer.errors}, status = status.HTTP_400_BAD_REQUEST)
+          return Response({"status": "error", "user": user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RegisterView(APIView):
@@ -50,7 +50,7 @@ class RegisterView(APIView):
 
     def post(self, request):
         data = request.data
-        data['role']='user'
+        data['role'] = 'user'
         user_serializer = UserSerializer(data=data)
         userdetail_serializer = UserDetailSerializer(data=data)
         if user_serializer.is_valid() and userdetail_serializer.is_valid():
@@ -62,7 +62,7 @@ class RegisterView(APIView):
                 'access': str(refresh.access_token),
                 'role': userdetail.role,
             }, status=status.HTTP_201_CREATED)
-        return Response({'error':user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': user_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginView(APIView):
     authentication_classes = []
@@ -72,15 +72,15 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         user = authenticate(username=username, password=password)
-        userdetail = UserDetail.objects.get(username=username)
         if user:
+            userdetail = UserDetail.objects.get(username=username)
             refresh = RefreshToken.for_user(user)
-            user = User.objects.get(username=username)
+            user_data = User.objects.get(username=username)
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'role': userdetail.role,
-                'fullname': user.first_name+" "+user.last_name,
+                'fullname': user_data.first_name + " " + user_data.last_name,
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
