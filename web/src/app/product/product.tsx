@@ -162,7 +162,7 @@ export default function Product() {
                     <UpdateSheet refresh={fetchProducts} product={product} />
                   </TableCell>
                   <TableCell className="p-0 sm:px-2 md:pr-6 w-8">
-                    <DeleteDialog />
+                    <DeleteDialog id={product.id} refresh={fetchProducts} />
                   </TableCell>
                 </TableRow>
               ))}
